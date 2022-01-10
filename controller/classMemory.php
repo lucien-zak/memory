@@ -1,5 +1,4 @@
 <?php
-session_start();
 class Memory
 {
 
@@ -74,7 +73,11 @@ class Memory
     function reinit()
     {
         if (isset($_POST['restart']) && $_POST['restart'] == 'restart') {
+            $bufferLOG = $_SESSION['login'];
+            $bufferID = $_SESSION['id'];
             session_destroy();
+            $_SESSION['login'] = $bufferLOG;
+            $_SESSION['id'] = $bufferID;
             header('refresh:0');
         }
     }
@@ -105,7 +108,7 @@ class Memory
 
     function GetColors($nbColor)
     {
-        $color = ['green', 'red', 'orange', 'yellow', 'blue', 'brown', 'grey', 'pink'];
+        $color = ['b', 'c', 'd', 'e', 'f', 'g', 'h','i','j','k','l','m'];
         shuffle($color);
         for ($m = 0; $m < $nbColor; $m++) {
             $randColor[$m] = $color[$m];
@@ -147,7 +150,7 @@ class Memory
                 }
             }
         }
-        return 'black';
+        return 'a';
     }
 
     function getAnim($indexcarte)
@@ -196,43 +199,6 @@ class Memory
         $this->setPremiereCarte();
         $this->setDeuxiemeCarte();
         $this->TableauAleatoireAssoc($this->_difficulte);
-        echo $this->getAnim(0);
-        echo '<form action="" method="POST">';
-        for ($i = 0; $i < $this->_difficulte; $i++) {
-?>
-            <input type="submit" name='choix' value="<?= $_SESSION['TableauAleatoire'][$i] ?>" <?= $this->estRetourne($_SESSION['TableauAleatoire'][$i]) ?>>
-        <?php
-        }
-        echo '<input  type="submit" name="restart" value="restart">';
-        echo '</form>';
-        echo '<style>';
-        for ($i = 0; $i < $this->_difficulte; $i++) {
-        ?>
-            input:nth-child(<?= $i + 1 ?>) {
-            background-color: grey;
-            background-image: url('./assets/images/<?= $this->GetColor($i) ?>.png');
-            background-repeat:no-repeat;
-            background-position: center center;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-size: cover;
-            border-style: none;
-            font-size: 0;
-            padding: 20vh 5vw;
-            margin : 5px;
-        }
-
-        @keyframes changeCarte {
-            from {background-image: url('./assets/images/black.png');} 
-            to {background-image: url('./assets/images/<?= $this->GetColor($i) ?>.png');}
-    }
-
-        <?php
-        }
-        ?>
-        </style>
-<?php
+        require './vue/memory.php';
     }
 }
-?>
