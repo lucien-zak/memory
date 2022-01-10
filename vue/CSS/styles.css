@@ -9,6 +9,7 @@
     color: currentColor;
 }
 
+
 html, body {
     padding: 0;
     margin: 0;
@@ -111,5 +112,5 @@ form#game {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    width: 70%;
+    width: 60%;
 }

@@ -26,7 +26,7 @@ class Memory
         if (isset($_POST['choix']) && !empty($_SESSION['carte1'])) {
             $_SESSION['carte2'] = $_POST['choix'];
             unset($_POST);
-            header('refresh:0');
+            header('location:/memory');
         }
     }
 
@@ -53,9 +53,11 @@ class Memory
             if (isset($gain) == 1) {
                 $this->_Malert = 'Gagné';
                 array_push($_SESSION['trouve'], $_SESSION['carte2'], $_SESSION['carte1']);
-                $_SESSION['score']++;
+                $_SESSION['score'] = $_SESSION['score'] + 20;
             } else {
                 $this->_Malert =  'Perdu';
+                $_SESSION['score'] = $_SESSION['score'] - 10;
+
             }
             $_SESSION['unset'] = 1;
         }
@@ -63,7 +65,8 @@ class Memory
     function initScore()
     {
         if (!isset($_SESSION['score'])) {
-            $_SESSION['score'] = 0;
+            $_SESSION['score'] = 100;
+            $_SESSION['timestampdebut'] = microtime(true);
         }
         if (!isset($_SESSION['trouve'])) {
             $_SESSION['trouve'] = [];
@@ -73,12 +76,12 @@ class Memory
     function reinit()
     {
         if (isset($_POST['restart']) && $_POST['restart'] == 'restart') {
-            $bufferLOG = $_SESSION['login'];
-            $bufferID = $_SESSION['id'];
-            session_destroy();
-            $_SESSION['login'] = $bufferLOG;
-            $_SESSION['id'] = $bufferID;
-            header('refresh:0');
+            unset($_SESSION['diff']);
+            unset($_SESSION['score']);
+            unset($_SESSION['trouve']);
+            unset($_SESSION['colors']);
+            unset($_SESSION['TableauAssoc']);
+            unset($_SESSION['TableauAleatoire']);
         }
     }
 
@@ -108,7 +111,7 @@ class Memory
 
     function GetColors($nbColor)
     {
-        $color = ['b', 'c', 'd', 'e', 'f', 'g', 'h','i','j','k','l','m'];
+        $color = ['b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
         shuffle($color);
         for ($m = 0; $m < $nbColor; $m++) {
             $randColor[$m] = $color[$m];
@@ -174,12 +177,10 @@ class Memory
 
     function findepartie()
     {
-        if (count($_SESSION["TableauAleatoire"]) != count($_SESSION["trouve"])) {
-            return 'hidden';
-        } else {
-            $this->_Malert =  'Fin de partie';
-            return '';
-        }
+        if (count($_SESSION["TableauAleatoire"]) == count($_SESSION["trouve"])) {
+            $_SESSION['timestampfin'] = microtime(true);
+            return TRUE;      
+        } 
     }
 
     function alertes()
@@ -191,14 +192,13 @@ class Memory
 
     function generationTableau()
     {
+        // $this->reinit();
         $this->initScore();
-        $this->reinit();
         $this->verifCarte();
-        echo '<br>Mon Score : ' . $_SESSION['score'] . '<br>';
-        $this->alertes();
         $this->setPremiereCarte();
         $this->setDeuxiemeCarte();
         $this->TableauAleatoireAssoc($this->_difficulte);
+        $this->findepartie();
         require './vue/memory.php';
     }
 }
