@@ -34,4 +34,6 @@ if ($_SERVER['REQUEST_URI'] == '/register') {
     require_once 'vue/register.php';
 }
 
-
+if ($_SERVER['REQUEST_URI'] == '/scoreboard') {
+    require_once 'vue/scoreboard.php';
+}

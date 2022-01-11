@@ -21,12 +21,12 @@
     ?>
 </style>
 
+<p><?= $this->alertes(); ?></p>
 
 <div id="page">
 
     <?php if ($this->findepartie() == FALSE) {
     ?>
-        <p><?= $this->alertes(); ?></p>
         <p><?= "Mon score : " . $_SESSION['score'] ?></p>
 
         <form id="game" action="" method="POST">
@@ -37,7 +37,7 @@
             <?php
             }
             ?>
-            <input type="submit" name="restart" value="restart">
+            <input type="submit" name="restart" value="Abandonner">
         </form>
 </div>
 
@@ -48,7 +48,7 @@
         echo 'Votre score total : '.$_SESSION['score'] 
 ?>
     <form id="game" action="" method="POST">
-        <input type="submit" name="restart" value="restart">
+        <input type="submit" name="restart" value="Recommencer">
     <?php
 
     }

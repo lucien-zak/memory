@@ -1,5 +1,8 @@
 <?php
-class Memory
+
+require_once 'model/ScoreModel.php';
+
+class Memory extends ScoreModel
 {
 
     private int $_difficulte;
@@ -53,11 +56,10 @@ class Memory
             if (isset($gain) == 1) {
                 $this->_Malert = 'Gagné';
                 array_push($_SESSION['trouve'], $_SESSION['carte2'], $_SESSION['carte1']);
-                $_SESSION['score'] = $_SESSION['score'] + 20;
+                $_SESSION['score'] = $_SESSION['score'] + 500;
             } else {
                 $this->_Malert =  'Perdu';
-                $_SESSION['score'] = $_SESSION['score'] - 10;
-
+                $_SESSION['score'] = $_SESSION['score'] - 250;
             }
             $_SESSION['unset'] = 1;
         }
@@ -65,7 +67,7 @@ class Memory
     function initScore()
     {
         if (!isset($_SESSION['score'])) {
-            $_SESSION['score'] = 100;
+            $_SESSION['score'] = 1000;
             $_SESSION['timestampdebut'] = microtime(true);
         }
         if (!isset($_SESSION['trouve'])) {
@@ -178,9 +180,15 @@ class Memory
     function findepartie()
     {
         if (count($_SESSION["TableauAleatoire"]) == count($_SESSION["trouve"])) {
-            $_SESSION['timestampfin'] = microtime(true);
-            return TRUE;      
-        } 
+            if (!isset($_SESSION['timestampfin'])) {
+                $_SESSION['timestampfin'] = microtime(true);
+            }
+            if (!isset($_SESSION['save'])) {
+                $this->insert_score($_SESSION['score'], round($_SESSION['timestampfin'] - $_SESSION['timestampdebut']), $_SESSION['id']);
+                $_SESSION['save'] = 1;
+            }
+            return TRUE;
+        }
     }
 
     function alertes()
@@ -192,7 +200,6 @@ class Memory
 
     function generationTableau()
     {
-        // $this->reinit();
         $this->initScore();
         $this->verifCarte();
         $this->setPremiereCarte();

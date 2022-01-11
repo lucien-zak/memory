@@ -18,5 +18,4 @@ class Utilisateur_model
 
     }
 
-    protected function getUtilisateursParLogin($login){}
 }
