@@ -6,16 +6,18 @@ class Memory extends ScoreModel
 {
 
     private int $_difficulte;
+    private int $_vie;
     public string $_Malert;
     public string $_Talert;
 
-    function __construct(int $difficulte)
+    function __construct(int $difficulte, int $vie)
     {
         $this->_difficulte = $difficulte;
+        $this->_vie = $vie;
     }
 
-
-    function setPremiereCarte()
+// Initialise la premiere carte dans $_SESSION['carte1']
+    function set_premierecarte()
     {
         if (!isset($_SESSION['carte1']) && isset($_POST['choix'])) {
             $_SESSION['carte1'] = $_POST['choix'];
@@ -23,8 +25,8 @@ class Memory extends ScoreModel
         }
     }
 
-
-    function setDeuxiemeCarte()
+    // Initialise la seconde carte dans $_SESSION['carte2']
+    function set_deuxiemecarte()
     {
         if (isset($_POST['choix']) && !empty($_SESSION['carte1'])) {
             $_SESSION['carte2'] = $_POST['choix'];
@@ -33,7 +35,9 @@ class Memory extends ScoreModel
         }
     }
 
-    function verifCarte()
+
+// Detruit Carte1 et Carte 2 si la vérif a été faite, puis fais la comparaison, si ok, pousse carte1 et 2 dans 'trouve"' et ajoute du score, sinon soustrait du score.
+    function verif_carte()
     {
         if (isset($_SESSION['unset']) && $_SESSION['unset'] == 1) {
             unset($_SESSION['carte1']);
@@ -57,14 +61,19 @@ class Memory extends ScoreModel
                 $this->_Malert = 'Gagné';
                 array_push($_SESSION['trouve'], $_SESSION['carte2'], $_SESSION['carte1']);
                 $_SESSION['score'] = $_SESSION['score'] + 500;
+                header('refresh:2');
             } else {
                 $this->_Malert =  'Perdu';
                 $_SESSION['score'] = $_SESSION['score'] - 250;
+                header('refresh:2');
+
             }
             $_SESSION['unset'] = 1;
         }
     }
-    function initScore()
+
+    // initialisation du score et du timer
+    function init_score()
     {
         if (!isset($_SESSION['score'])) {
             $_SESSION['score'] = 1000;
@@ -74,7 +83,7 @@ class Memory extends ScoreModel
             $_SESSION['trouve'] = [];
         }
     }
-
+    //reinit les variables pour redémarrer le jeu
     function reinit()
     {
         if (isset($_POST['restart']) && $_POST['restart'] == 'restart') {
@@ -86,11 +95,11 @@ class Memory extends ScoreModel
             unset($_SESSION['TableauAleatoire']);
         }
     }
-
-    function TableauAleatoireAssoc($nbid)
+    //definit un tableau aléatoire associatif 
+    function set_tableaualeatoireassoc($nbid)
     {
         $tableaualeatoire = [];
-        $couleur = $this->GetColors($nbid / 2);
+        $couleur = $this->set_imgs($nbid / 2);
         for ($j = 0; $j < $nbid / 2; $j++) {
             $tableaualeatoire[0][$couleur[$j]] = uniqid();
         }
@@ -111,7 +120,8 @@ class Memory extends ScoreModel
         }
     }
 
-    function GetColors($nbColor)
+    //definit aléatoirement des color qui correspondent à des cartes. (nommé $color.png et retourne un tableau
+    function set_imgs($nbColor)
     {
         $color = ['b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
         shuffle($color);
@@ -123,8 +133,9 @@ class Memory extends ScoreModel
         }
         return $randColor;
     }
-
-    function GetColor($indexcarte)
+    
+    // Retourne une couleur si la carte est cliqué ou trouvé pour le <styles>
+    function set_img($indexcarte)
     {
         if (isset($_SESSION['carte1'])) {
             for ($j = 0; $j < count($_SESSION['TableauAssoc']); $j++) {
@@ -158,17 +169,18 @@ class Memory extends ScoreModel
         return 'a';
     }
 
-    function getAnim($indexcarte)
+    //animation fadin fadout pour les cartes, retourne une ligne d'animation pour <styles>
+    function set_anim($indexcarte)
     {
-        if (isset($_SESSION['carte1']) && $_SESSION['TableauAleatoire'][$indexcarte] == $_SESSION['carte1']) {
-            return 'animation: 10s forwards changeCarte;';
+        if (isset($_SESSION['carte1']) && !isset($_SESSION['carte2']) && $_SESSION['TableauAleatoire'][$indexcarte] == $_SESSION['carte1']) {
+            return 'animation: 1s ease changecarte;';
         }
         if (isset($_SESSION['carte2']) && $_SESSION['TableauAleatoire'][$indexcarte] == $_SESSION['carte2']) {
-            return 'animation: 10s changeCarte forwards;';
+            return 'animation: 1s ease changecarte ;';
         }
     }
-
-    function estRetourne($id)
+    // retourne disabled dans la vue pour ne plus rendre clikable les cartes retournées
+    function est_retourne($id)
     {
         foreach ($_SESSION['trouve'] as $value) {
             if ($id == $value) {
@@ -176,8 +188,8 @@ class Memory extends ScoreModel
             }
         }
     }
-
-    function findepartie()
+    // définit la fin de partie, retourne un booléen
+    function set_findepartie()
     {
         if (count($_SESSION["TableauAleatoire"]) == count($_SESSION["trouve"])) {
             if (!isset($_SESSION['timestampfin'])) {
@@ -197,15 +209,15 @@ class Memory extends ScoreModel
             echo $this->_Malert;
         }
     }
-
+    // lancement des méthodes dans l'orde du jeu et require la vue pour les submit + styles
     function generationTableau()
     {
-        $this->initScore();
-        $this->verifCarte();
-        $this->setPremiereCarte();
-        $this->setDeuxiemeCarte();
-        $this->TableauAleatoireAssoc($this->_difficulte);
-        $this->findepartie();
+        $this->init_score();
+        $this->verif_carte();
+        $this->set_premierecarte();
+        $this->set_deuxiemecarte();
+        $this->set_tableaualeatoireassoc($this->_difficulte);
+        $this->set_findepartie();
         require './vue/memory.php';
     }
 }

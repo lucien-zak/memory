@@ -23,7 +23,7 @@ class Utilisateur extends Utilisateur_model
         return $this->_Malert;
     }
 
-    private function verifmdp2()
+    private function verif_mdp2()
     {
         if ($this->_mdp == $this->_mdp2) {
             if ($this->_mdp == "") {
@@ -56,7 +56,7 @@ class Utilisateur extends Utilisateur_model
 
     public function inscription_utilisateur()
     {
-        if ($this->verifmdp2() && $this->verif_exist_util() == FALSE) {
+        if ($this->verif_mdp2() && $this->verif_exist_util() == FALSE) {
             $this->ins_util($this->_login, $this->_mdp);
             $_SESSION['login'] = $this->_login;
             $this->_Malert = 'Votre compte a été crée, ' . $this->_login . ', vous allez être redirigé...';
@@ -74,7 +74,7 @@ class Utilisateur extends Utilisateur_model
                 return;
             }
         $this->_mdp2 = $util[0]['password'];
-        if ($this->verifmdp2()) {
+        if ($this->verif_mdp2()) {
             $this->_Malert = "Bienvenue ".$this->_login;
             $this->_Talert = 1;
             $_SESSION['login'] = $this->_login;

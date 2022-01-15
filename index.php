@@ -9,10 +9,6 @@ if(isset($_SESSION['login'])){
     }
 }
 
-if ($_SERVER['REQUEST_URI'] == '/debug'){
-    require_once './vue/debug.php'; 
-
-}
 
 if ($_SERVER['REQUEST_URI'] == '/disconnect'){
     session_destroy();
@@ -37,3 +33,6 @@ if ($_SERVER['REQUEST_URI'] == '/register') {
 if ($_SERVER['REQUEST_URI'] == '/scoreboard') {
     require_once 'vue/scoreboard.php';
 }
+
+require_once './vue/footer.php';
+

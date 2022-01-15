@@ -1,7 +1,7 @@
 <div id="pageAcceuil">
     <h1>HALL OF FAME</h1>
     <div id="pageHAF">
-        <div>
+        <div id='scoreperso'>
             <p>Toutes mes parties</p>
             <?php
             if (isset($_SESSION['login'])) {

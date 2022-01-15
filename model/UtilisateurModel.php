@@ -3,7 +3,7 @@
 class Utilisateur_model
 {
 
-    protected function req_UtilParLogin($login)
+    protected function req_utilparlogin($login)
     {
         require 'model/db.php';
         $stmt = $pdo->prepare('SELECT * FROM utilisateurs WHERE login=?');

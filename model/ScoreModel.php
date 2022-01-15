@@ -14,7 +14,7 @@ class ScoreModel
         require 'model/db.php';
         $stmt = $pdo->prepare('SELECT `score`,`duree`,DATE_FORMAT(created_at, "%d-%m-%Y %H:%i") FROM memory.Score t WHERE id_utilisateur = ? ORDER BY created_at DESC LIMIT ?');
         $stmt->execute([$id, $limit]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     function req_scoremoyenparutil($id)

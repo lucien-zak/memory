@@ -3,7 +3,7 @@
     for ($i = 0; $i < $this->_difficulte; $i++) {
     ?>input.carte:nth-child(<?= $i + 1 ?>) {
         background-color: transparent;
-        background-image: url('./vue/assets/images/<?= $this->GetColor($i) ?>.png');
+        background-image: url('./vue/assets/images/<?= $this->set_img($i) ?>.png');
         background-repeat: no-repeat;
         background-position: center center;
         -webkit-background-size: contain;
@@ -14,6 +14,7 @@
         font-size: 0;
         padding: 100px 50px;
         margin: 5px;
+        <?=$this->set_anim($i) ?>
     }
 
     <?php
@@ -25,7 +26,7 @@
 
 <div id="page">
 
-    <?php if ($this->findepartie() == FALSE) {
+    <?php if ($this->set_findepartie() == FALSE) {
     ?>
         <p><?= "Mon score : " . $_SESSION['score'] ?></p>
 
@@ -33,7 +34,7 @@
             <?php
             for ($i = 0; $i < $this->_difficulte; $i++) {
             ?>
-                <input class="carte" type="submit" name='choix' value="<?= $_SESSION['TableauAleatoire'][$i] ?>" <?= $this->estRetourne($_SESSION['TableauAleatoire'][$i]) ?>>
+                <input class="carte" type="submit" name='choix' value="<?= $_SESSION['TableauAleatoire'][$i] ?>" <?= $this->est_retourne($_SESSION['TableauAleatoire'][$i]) ?>>
             <?php
             }
             ?>

@@ -6,11 +6,11 @@ if (!isset($_POST['diff'])) {
             <label for="diff">Choix de la difficulté :</label>
 
             <select name="diff">
-                <option value="6">Facile</option>
-                <option value="8">Moyen</option>
-                <option value="12">Difficile</option>
-                <option value="16">Très difficile</option>
-                <option value="24">ULTRA difficile (impossible)</option>
+                <option value="6">3 paires</option>
+                <option value="8">4 paires</option>
+                <option value="12">6 paires</option>
+                <option value="16">8 paires</option>
+                <option value="24">12 paires</option>
             </select>
             <input type="submit" value="C'est parti">
         </form>
@@ -42,7 +42,7 @@ if (isset($_POST['restart'])) {
 }
 
 if (isset($_SESSION['diff'])) {
-    $memory = new Memory($_SESSION['diff']);
+    $memory = new Memory($_SESSION['diff'], 0);
     $memory->generationTableau();
 }
 

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="vue/CSS/styles.css">
     <title>Memory</title>
 </head>
-
 <body>
     <header>
         <nav id="navbar">
@@ -41,3 +40,4 @@
         </nav>
     </header>
     <main>
+   
