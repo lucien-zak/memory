@@ -14,7 +14,7 @@
         font-size: 0;
         padding: 100px 50px;
         margin: 5px;
-        <?=$this->set_anim($i) ?>
+        <?= $this->set_anim($i) ?>
     }
 
     <?php
@@ -22,7 +22,6 @@
     ?>
 </style>
 
-<p><?= $this->alertes(); ?></p>
 
 <div id="page">
 
@@ -38,15 +37,19 @@
             <?php
             }
             ?>
-            <input type="submit" name="restart" value="Abandonner">
         </form>
 </div>
 
+<div id="abandonner">
+
+    <form id="abandonner" action="" method="POST">
+        <input type="submit" name="restart" value="Abandonner">
+</div>
 <?php
     } else {
         echo 'Fin de partie<br><br>';
         echo 'Votre temps : ' . round($_SESSION['timestampfin'] - $_SESSION['timestampdebut']) . 's<br><br>';
-        echo 'Votre score total : '.$_SESSION['score'] 
+        echo 'Votre score total : ' . $_SESSION['score'] . '<br><br>'
 ?>
     <form id="game" action="" method="POST">
         <input type="submit" name="restart" value="Recommencer">
