@@ -5,12 +5,6 @@
             <?php
             if (isset($_SESSION['login'])) {
             ?>
-                <style>
-                    div#scoreperso {
-                        height: 40%;
-                        overflow: scroll;
-                    }
-                </style>
                 <p>Toutes mes parties</p>
 
                 <table>
